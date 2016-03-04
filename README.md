@@ -2,7 +2,7 @@
 `elastec-network-interface-attach`
 ======================
 
-Attach an elastic network interface (eni) to the instance running this container.
+Docker container to auto-attach an elastic network interface (eni) to the host instance.
 
 Inspired by [YoApp/elastic-ip-attach](https://github.com/YoApp/elastic-ip-attach).
 
