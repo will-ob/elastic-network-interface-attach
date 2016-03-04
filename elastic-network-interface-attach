@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import sys
+
+import boto3
+import requests
+
+
+parser = argparse.ArgumentParser(
+          description = "Associate an Elastic Network Interface with the host ec2 machine."
+        )
+
+parser.add_argument('--interface-id',
+        metavar = '<INTERFACE_ID>',
+        default = os.environ.get('INTERFACE_ID'),
+        help = 'Id of elastic network interface. Eg. \'eni-0ef6dd40\''
+        )
+
+parser.add_argument('--device-index',
+        metavar = '<DEVICE_INDEX>',
+        default = 1,
+        help = 'Device index to attach at. Primary devices are attached at 0. You probably want 1+ here. Default: 1'
+        )
+
+args = parser.parse_args()
+
+region = requests.get('http://169.254.169.254/latest/dynamic/instance-identity/document').json()['region']
+
+instanceId = requests.get("http://169.254.169.254/latest/meta-data/instance-id").content
+
+print "Attempting to attach"
+print "Region %s" % region
+print "Instance %s" % instanceId
+print "Interface %s" % args.interface_id
+
+ec2 = boto3.resource('ec2', region_name = region)
+
+iface = ec2.NetworkInterface(args.interface_id)
+iface.attach(
+        DryRun = False,
+        InstanceId = instanceId,
+        DeviceIndex = args.device_index)
+
+print "Attachment successful..."
+
+sys.exit(os.EX_OK)

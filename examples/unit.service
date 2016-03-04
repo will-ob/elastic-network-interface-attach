@@ -1,0 +1,12 @@
+[Unit]
+        Description=Attaches elastic network interface if available
+        After=docker.service
+        Requires=docker.service
+        [Service]
+        Environment=INTERFACE_ID=eni-0ef6dd40
+        Restart=no
+        ExecPreStart=-/usr/bin/docker kill eni-attach
+        ExecPreStart=-/usr/bin/docker rm eni-attach
+        ExecStartPre=-/usr/bin/docker pull quay.io/will_ob/elastic-network-interface-attach:latest
+        ExecStart=/bin/bash -c "/usr/bin/docker run --rm --name eni-attach -e INTERFACE_ID=$INTERFACE_ID quay.io/will_ob/elastic-network-interface-attach:latest"
+
