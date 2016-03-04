@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+version="$(git describe --abbrev=0)"
+
+ID="$(docker images | grep 'will_ob/elastic-network-interface-attach' | head -n 1 | awk '{print $3}')"
+
+docker tag -f $ID quay.io/will_ob/elastic-network-interface-attach:$version
+docker tag -f $ID quay.io/will_ob/elastic-network-interface-attach:latest
+
+docker push quay.io/will_ob/elastic-network-interface-attach:$version
+
