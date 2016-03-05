@@ -1,5 +1,5 @@
 
-`elastec-network-interface-attach`
+`elastic-network-interface-attach`
 ======================
 
 Docker container to auto-attach an elastic network interface (eni) to the host instance.
